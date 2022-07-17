@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+var cookieSession = require('cookie-session');
 import { INestApplication } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 function sweggerConfig(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -15,9 +16,14 @@ function sweggerConfig(app: INestApplication) {
 }
 
 async function bootstrap() {
-  const port = process.env.PORT || 8081;
+  const port = process.env.PORT || 5000;
   const app = await NestFactory.create(AppModule, { cors: true });
   sweggerConfig(app);
+  app.use(
+    cookieSession({
+      keys: ['portfolio'],
+    }),
+  );
   await app.listen(port);
 }
 

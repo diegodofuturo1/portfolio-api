@@ -1,10 +1,11 @@
-import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/entity/user.entity';
+import { SignUpDto } from 'src/dtos/signup.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 
 export class CreateUserCommand implements ICommand {
-  constructor(public user: User) {}
+  constructor(public user: SignUpDto) {}
 }
 
 @CommandHandler(CreateUserCommand)

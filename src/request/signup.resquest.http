@@ -1,0 +1,17 @@
+#Email already exists
+POST http://localhost:5000/auth/signup
+content-type: application/json
+
+{
+  "email": "diegodofuturo1@gmail.com",
+  "password": "xxx"
+}
+
+###Create Email
+POST http://localhost:5000/auth/signup
+content-type: application/json
+
+{
+  "email": "teste1@gmail.com",
+  "password": "123456"
+}

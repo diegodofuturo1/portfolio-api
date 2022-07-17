@@ -1,0 +1,35 @@
+#Email already exists
+POST http://localhost:5000/auth/signin
+content-type: application/json
+
+{
+  "email": "teste1@gmail.com",
+  "password": "123456"
+}
+
+### not exists user
+POST http://localhost:5000/auth/signin
+content-type: application/json
+
+{
+  "email": "teste@notexist.com",
+  "password": "123456"
+}
+
+### invalid password
+POST http://localhost:5000/auth/signin
+content-type: application/json
+
+{
+  "email": "teste1@gmail.com",
+  "password": "xxxxxx"
+}
+
+### whoami
+GET http://localhost:5000/auth/whoami
+content-type: application/json
+
+
+### signout
+POST http://localhost:5000/auth/signout
+content-type: application/json

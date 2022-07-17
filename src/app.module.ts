@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './endpoint/users/user.module';
-import Entity from './entity';
 import 'dotenv/config';
+import Entity from './entity';
+import { Module } from '@nestjs/common';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
+import { AuthModule } from './endpoint/auth/auth.module';
+import { UserModule } from './endpoint/users/user.module';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 const typeormConfig: TypeOrmModuleOptions = {
   type: process.env.DB_TYPE,
@@ -17,10 +18,8 @@ const typeormConfig: TypeOrmModuleOptions = {
   synchronize: true,
 };
 
-console.table(typeormConfig);
-
 @Module({
-  imports: [TypeOrmModule.forRoot(typeormConfig), UserModule],
+  imports: [TypeOrmModule.forRoot(typeormConfig), UserModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
