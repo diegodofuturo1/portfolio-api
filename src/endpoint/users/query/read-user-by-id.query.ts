@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 export class ReadUserByIdQuery implements IQuery {
@@ -19,9 +19,12 @@ export class ReadUserByIdQueryHandler
 
   async execute(query: ReadUserByIdQuery): Promise<any> {
     const { id } = query;
+
+    if (!id) throw new BadRequestException('Id não informado');
+
     const user = await this.repository.findOne({ id });
 
-    if (!user) throw new BadRequestException('Usuário não encontrado');
+    if (!user) throw new NotFoundException('Usuário não encontrado');
 
     return user;
   }

@@ -9,6 +9,7 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from 'src/entity/user.entity';
 import { SignInDto } from 'src/dtos/signin.dto';
+import { UserDto } from 'src/dtos/user.dto';
 
 const scrypt = promisify(_scrypt);
 @Injectable()
@@ -33,7 +34,7 @@ export class AuthService {
     return encript;
   }
 
-  async signup(request: SignUpDto) {
+  async signup(request: SignUpDto): Promise<UserDto> {
     const { email, password, name } = request;
 
     const available = await this.emailIsAvailable(email);
@@ -48,10 +49,15 @@ export class AuthService {
       password: encripted,
     });
 
-    return user;
+    return {
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar,
+    };
   }
 
-  async signin(request: SignInDto) {
+  async signin(request: SignInDto): Promise<UserDto> {
     const { email, password } = request;
 
     const user: User = await this.users.getUserByEmail(email);
@@ -66,7 +72,12 @@ export class AuthService {
     if (decrypted.toString('hex') != hash)
       throw new BadRequestException('Senha inválida!');
 
-    return user;
+    return {
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar,
+    };
   }
 
   async whoami(id: string) {
