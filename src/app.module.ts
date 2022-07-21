@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './endpoint/auth/auth.module';
 import { UserModule } from './endpoint/users/user.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { PortfolioModule } from './endpoint/portfolio/portfolio.module';
 
 const typeormConfig: TypeOrmModuleOptions = {
   type: process.env.DB_TYPE,
@@ -19,7 +20,12 @@ const typeormConfig: TypeOrmModuleOptions = {
 };
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeormConfig), UserModule, AuthModule],
+  imports: [
+    TypeOrmModule.forRoot(typeormConfig),
+    UserModule,
+    AuthModule,
+    PortfolioModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -4,9 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { Experience } from 'src/entity/portfolio/experience.entity';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { ExperienceDto } from '../dto/experience.dto';
 
 export class CreateExperienceCommand implements ICommand {
-  constructor(public experience: Experience) {}
+  constructor(public experience: ExperienceDto) {}
 }
 
 @CommandHandler(CreateExperienceCommand)

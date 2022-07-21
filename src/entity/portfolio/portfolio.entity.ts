@@ -6,10 +6,10 @@ export class Portfolio {
   id: string;
 
   @Column()
-  owner: string;
+  userId: string;
 
   @Column()
-  userId: string;
+  owner: string;
 
   @Column()
   avatar: string;

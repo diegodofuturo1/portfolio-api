@@ -4,9 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { Portfolio } from 'src/entity/portfolio/portfolio.entity';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { PortfolioDto } from '../dto/portfolio.dto';
 
 export class CreatePortfolioCommand implements ICommand {
-  constructor(public portfolio: Portfolio) {}
+  constructor(public portfolio: PortfolioDto) {}
 }
 
 @CommandHandler(CreatePortfolioCommand)

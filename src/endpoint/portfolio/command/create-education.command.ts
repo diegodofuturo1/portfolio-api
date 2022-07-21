@@ -4,9 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { Education } from 'src/entity/portfolio/education.entity';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { EducationDto } from '../dto/education.dto';
 
 export class CreateEducationCommand implements ICommand {
-  constructor(public education: Education) {}
+  constructor(public education: EducationDto) {}
 }
 
 @CommandHandler(CreateEducationCommand)

@@ -4,9 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { Skill } from 'src/entity/portfolio/skill.entity';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { SkillDto } from '../dto/skill.dto';
 
 export class CreateSkillCommand implements ICommand {
-  constructor(public skill: Skill) {}
+  constructor(public skill: SkillDto) {}
 }
 
 @CommandHandler(CreateSkillCommand)

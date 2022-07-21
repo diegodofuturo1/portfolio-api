@@ -6,9 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { <entity> } from 'src/entity/<path>/<name>.entity';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { <entity>Dto } from '../dto/<name>.dto';
 
 export class Create<entity>Command implements ICommand {
-  constructor(public <name>: <entity>) {}
+  constructor(public <name>: <entity>Dto) {}
 }
 
 @CommandHandler(Create<entity>Command)

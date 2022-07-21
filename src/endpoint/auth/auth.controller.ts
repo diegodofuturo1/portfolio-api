@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
-import { HttpResponseDto as ResponseDto } from 'src/dtos/response.dto';
-import { SignInDto } from 'src/dtos/signin.dto';
-import { SignUpDto } from 'src/dtos/signup.dto';
+import { HttpResponseDto as ResponseDto } from 'src/endpoint/auth/dto/response.dto';
+import { SignInDto } from './dto/signin.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { User } from 'src/entity/user.entity';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { AuthService } from './auth.service';

@@ -1,9 +1,10 @@
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
-import { SignUpDto } from 'src/dtos/signup.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { BadRequestException } from '@nestjs/common';
+import { SignUpDto } from 'src/endpoint/auth/dto/signup.dto';
+import { UserDto } from 'src/endpoint/auth/dto/user.dto';
 
 export class CreateUserCommand implements ICommand {
   constructor(public user: SignUpDto) {}
@@ -18,7 +19,7 @@ export class CreateUserCommandHandler
     private readonly repository: Repository<User>,
   ) {}
 
-  async execute(command: CreateUserCommand): Promise<User> {
+  async execute(command: CreateUserCommand): Promise<UserDto> {
     const { user } = command;
 
     if (!user.name) throw new BadRequestException('Nome não informado');

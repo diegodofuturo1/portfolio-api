@@ -1,7 +1,7 @@
 import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 var cookieSession = require('cookie-session');
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 function sweggerConfig(app: INestApplication) {
@@ -15,15 +15,26 @@ function sweggerConfig(app: INestApplication) {
   SwaggerModule.setup('api', app, document);
 }
 
-async function bootstrap() {
-  const port = process.env.PORT || 5000;
-  const app = await NestFactory.create(AppModule, { cors: true });
-  sweggerConfig(app);
+function cookieConfig(app: INestApplication) {
   app.use(
     cookieSession({
       keys: ['portfolio'],
     }),
   );
+}
+
+function validationConfig(app: INestApplication) {
+  app.useGlobalPipes(new ValidationPipe());
+}
+
+async function bootstrap() {
+  const port = process.env.PORT || 5000;
+  const app = await NestFactory.create(AppModule, { cors: true });
+
+  sweggerConfig(app);
+  cookieConfig(app);
+  validationConfig(app);
+
   await app.listen(port);
 }
 

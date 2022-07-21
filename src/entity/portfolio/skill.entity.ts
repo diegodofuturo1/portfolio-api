@@ -15,5 +15,5 @@ export class Skill {
   skill: string;
 
   @Column()
-  rating: string;
+  rating: number;
 }

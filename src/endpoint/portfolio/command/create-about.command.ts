@@ -4,9 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { About } from 'src/entity/portfolio/about.entity';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { AboutDto } from '../dto/about.dto';
 
 export class CreateAboutCommand implements ICommand {
-  constructor(public about: About) {}
+  constructor(public about: AboutDto) {}
 }
 
 @CommandHandler(CreateAboutCommand)

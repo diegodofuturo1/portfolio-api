@@ -3,13 +3,13 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { SignUpDto } from 'src/dtos/signup.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { UserService } from '../users/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from 'src/entity/user.entity';
-import { SignInDto } from 'src/dtos/signin.dto';
-import { UserDto } from 'src/dtos/user.dto';
+import { SignInDto } from './dto/signin.dto';
+import { UserDto } from './dto/user.dto';
 
 const scrypt = promisify(_scrypt);
 @Injectable()
