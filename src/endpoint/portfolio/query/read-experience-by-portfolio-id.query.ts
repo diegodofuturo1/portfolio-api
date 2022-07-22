@@ -6,7 +6,7 @@ import { Experience } from 'src/entity/portfolio/experience.entity';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 export class ReadExperienceByPortfolioIdQuery implements IQuery {
-  constructor(public readonly portfolioId: string) {}
+  constructor(public readonly portfolioId: string, public userId: string) {}
 }
 
 @QueryHandler(ReadExperienceByPortfolioIdQuery)
@@ -19,11 +19,11 @@ export class ReadExperienceByPortfolioIdQueryHandler
   ) {}
 
   async execute(query: ReadExperienceByPortfolioIdQuery): Promise<Experience[]> {
-    const { portfolioId } = query;
+    const { portfolioId, userId } = query;
 
     if (!portfolioId) throw new BadRequestException('Id não informado');
 
-    const experience = await this.repository.find({ portfolioId });
+    const experience = await this.repository.find({ portfolioId, userId });
 
     return experience;
   }

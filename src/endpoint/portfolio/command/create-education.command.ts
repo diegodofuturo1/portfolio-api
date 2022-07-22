@@ -7,7 +7,7 @@ import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { EducationDto } from '../dto/education.dto';
 
 export class CreateEducationCommand implements ICommand {
-  constructor(public education: EducationDto) {}
+  constructor(public education: EducationDto, public userId: string) {}
 }
 
 @CommandHandler(CreateEducationCommand)
@@ -20,7 +20,7 @@ export class CreateEducationCommandHandler
   ) {}
 
   async execute(command: CreateEducationCommand): Promise<Education> {
-    const { education } = command;
+    const { education, userId } = command;
 
     if (!education.school) throw new BadRequestException('Escola/Faculdade não informada');
 		if (!education.classroom) throw new BadRequestException('Curso não informado');
@@ -30,7 +30,7 @@ export class CreateEducationCommandHandler
 		if (!education.period) throw new BadRequestException('Período não informado');
 		if (!education.details) throw new BadRequestException('Detalhes não informado');
 
-    const entity = this.repository.create(education);
+    const entity = this.repository.create({ ...education, userId });
     return await this.repository.save(entity);
   }
 }

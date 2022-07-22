@@ -8,7 +8,7 @@ import { <Entity> } from 'src/entity/<path>/<entity>.entity';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 export class Read<Entity>By<Foreign>IdQuery implements IQuery {
-  constructor(public readonly <foreign>Id: string) {}
+  constructor(public readonly <foreign>Id: string, public userId: string) {}
 }
 
 @QueryHandler(Read<Entity>By<Foreign>IdQuery)
@@ -21,11 +21,11 @@ export class Read<Entity>By<Foreign>IdQueryHandler
   ) {}
 
   async execute(query: Read<Entity>By<Foreign>IdQuery): Promise<<Entity>[]> {
-    const { <foreign>Id } = query;
+    const { <foreign>Id, userId } = query;
 
     if (!<foreign>Id) throw new BadRequestException('Id não informado');
 
-    const <entity> = await this.repository.find({ <foreign>Id });
+    const <entity> = await this.repository.find({ <foreign>Id, userId });
 
     return <entity>;
   }
@@ -45,12 +45,16 @@ const execute = (Entity, Foreign, path) => {
     .replace(new RegExp('<path>', 'g'), path);
 
   fs.writeFileSync(
-    `src/endpoint/${path}/query/read-${entity}-by-${foreign}-id-query.ts`,
+    `src/endpoint/${path}/query/read-${entity}-by-${foreign}-id.query.ts`,
     query,
+  );
+
+  console.log(
+    `[SUCESSO] - arquivo criado: src/endpoint/${path}/query/read-${entity}-by-${foreign}-id.query.ts`,
   );
 };
 
-execute(`Skill`, 'Experience', 'portfolio');
-execute(`Experience`, 'Portfolio', 'portfolio');
-execute(`Education`, 'Portfolio', 'portfolio');
 execute(`About`, 'Portfolio', 'portfolio');
+execute(`Education`, 'Portfolio', 'portfolio');
+execute(`Experience`, 'Portfolio', 'portfolio');
+execute(`Skill`, 'Experience', 'portfolio');

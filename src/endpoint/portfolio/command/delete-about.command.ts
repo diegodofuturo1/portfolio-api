@@ -1,4 +1,3 @@
-
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { About } from 'src/entity/portfolio/about.entity';
@@ -24,4 +23,3 @@ export class DeleteAboutCommandHandler
     return await this.repository.delete(entity);
   }
 }
-

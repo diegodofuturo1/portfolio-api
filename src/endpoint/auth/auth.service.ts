@@ -18,8 +18,7 @@ export class AuthService {
 
   async emailIsAvailable(email: string) {
     try {
-      const user = await this.users.getUserByEmail(email);
-      console.log('[USER]', user);
+      await this.users.getUserByEmail(email);
       return false;
     } catch (exception) {
       return true;

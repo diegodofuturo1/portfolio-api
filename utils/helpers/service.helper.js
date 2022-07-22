@@ -20,27 +20,27 @@ export class PortfolioService {
 `;
 
 const functionTemplate = `
-async create<Entity>(<entity>: <Entity>Dto): Promise<<Entity>> {
-  return await this.commandBus.execute(new Create<Entity>Command(<entity>));
+async create<Entity>(<entity>: <Entity>Dto, userId: string): Promise<<Entity>> {
+  return await this.commandBus.execute(new Create<Entity>Command(<entity>, userId));
 }
 
-async read<Entity>byId(id: string): Promise<<Entity>> {
-  return await this.queryBus.execute(new Read<Entity>ByIdQuery(id));
+async read<Entity>byId(id: string, userId: string): Promise<<Entity>> {
+  return await this.queryBus.execute(new Read<Entity>ByIdQuery(id, userId));
 }
 <optional>
-async update<Entity>(<entity>: <Entity>): Promise<<Entity>> {
-  const _<entity> = await this.read<Entity>byId(<entity>.id);
-  return await this.commandBus.execute(new Update<Entity>Command(_<entity>, <entity>));
+async update<Entity>(id: string, <entity>: <Entity>Dto, userId: string): Promise<<Entity>> {
+  const _<entity> = await this.read<Entity>byId(id, userId);
+  return await this.commandBus.execute(new Update<Entity>Command(_<entity>, { ...<entity>, id, userId }));
 }
 
-async delete<Entity>(id: string): Promise<<Entity>> {
-  const _<entity> = await this.read<Entity>byId(id);
+async delete<Entity>(id: string, userId: string): Promise<<Entity>> {
+  const _<entity> = await this.read<Entity>byId(id, userId);
   return await this.commandBus.execute(new Delete<Entity>Command(_<entity>));
 }`;
 
 const optional = `
-async read<Entity>by<Foreign>Id(id: string): Promise<<Entity>> {
-  return await this.queryBus.execute(new Read<Entity>By<Foreign>IdQuery(id));
+async read<Entity>by<Foreign>Id(id: string, userId: string): Promise<<Entity>> {
+  return await this.queryBus.execute(new Read<Entity>By<Foreign>IdQuery(id, userId));
 }
 `;
 
@@ -83,10 +83,7 @@ const execute = (entities, path) => {
     .replace(new RegExp('<query>', 'g'), params.querys.join(', '))
     .replace(new RegExp('<functions>', 'g'), params.functions.join('\n'));
 
-  fs.writeFileSync(
-    `src/endpoint/${path}/${path}.auto-generated.service.ts`,
-    service,
-  );
+  fs.writeFileSync(`src/endpoint/${path}/${path}.service.ts`, service);
 };
 
 execute(

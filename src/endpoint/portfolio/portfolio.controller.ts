@@ -1,4 +1,5 @@
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { PortfolioService } from './portfolio.service';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import {
@@ -10,6 +11,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   User,
@@ -32,168 +34,175 @@ import {
 export class PortfolioController {
   constructor(private readonly service: PortfolioService) {}
 
+  @UseGuards(AuthGuard)
   @Post('about')
-  async postAbout(@Body() body: AboutDto) {
-    return await this.service.createAbout(body);
+  async postAbout(@Body() body: AboutDto, @CurrentUser() user: User) {
+    return await this.service.createAbout(body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Get('about/:id')
-  async getAboutById(@Param(':id') id: string) {
-    return await this.service.readAboutbyId(id);
+  async getAboutById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.readAboutbyId(id, user.id);
   }
 
   @Get('about')
-  async getAboutByPortfolioId(@Query(':portfolioId') portfolioId: string) {
-    return await this.service.readAboutbyPortfolioId(portfolioId);
+  async getAboutByPortfolioId(
+    @Query(':portfolioId') portfolioId: string,
+    @CurrentUser() user: User,
+  ) {
+    return await this.service.readAboutbyPortfolioId(portfolioId, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Put('about/:id')
   async putAbout(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body() body: AboutDto,
     @CurrentUser() user: User,
   ) {
-    const about: About = {
-      id,
-      ...body,
-      userId: user.id,
-    };
-    return await this.service.updateAbout(about);
+    return await this.service.updateAbout(id, body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('about/:id')
-  async deleteAbout(@Param(':id') id: string) {
-    return await this.service.deleteAbout(id);
+  async deleteAbout(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.deleteAbout(id, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Post('education')
-  async postEducation(@Body() body: EducationDto) {
-    return await this.service.createEducation(body);
+  async postEducation(@Body() body: EducationDto, @CurrentUser() user: User) {
+    return await this.service.createEducation(body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Get('education/:id')
-  async getEducationById(@Param(':id') id: string) {
-    return await this.service.readEducationbyId(id);
+  async getEducationById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.readEducationbyId(id, user.id);
   }
 
   @Get('education')
-  async getEducationByPortfolioId(@Query(':portfolioId') portfolioId: string) {
-    return await this.service.readEducationbyPortfolioId(portfolioId);
+  async getEducationByPortfolioId(
+    @Query(':portfolioId') portfolioId: string,
+    @CurrentUser() user: User,
+  ) {
+    return await this.service.readEducationbyPortfolioId(portfolioId, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Put('education/:id')
   async putEducation(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body() body: EducationDto,
     @CurrentUser() user: User,
   ) {
-    const education: Education = {
-      id,
-      ...body,
-      userId: user.id,
-    };
-    return await this.service.updateEducation(education);
+    return await this.service.updateEducation(id, body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('education/:id')
-  async deleteEducation(@Param(':id') id: string) {
-    return await this.service.deleteEducation(id);
+  async deleteEducation(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.deleteEducation(id, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Post('experience')
-  async postExperience(@Body() body: ExperienceDto) {
-    return await this.service.createExperience(body);
+  async postExperience(@Body() body: ExperienceDto, @CurrentUser() user: User) {
+    return await this.service.createExperience(body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Get('experience/:id')
-  async getExperienceById(@Param(':id') id: string) {
-    return await this.service.readExperiencebyId(id);
+  async getExperienceById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.readExperiencebyId(id, user.id);
   }
 
   @Get('experience')
-  async getExperienceByPortfolioId(@Query(':portfolioId') portfolioId: string) {
-    return await this.service.readExperiencebyPortfolioId(portfolioId);
+  async getExperienceByPortfolioId(
+    @Query(':portfolioId') portfolioId: string,
+    @CurrentUser() user: User,
+  ) {
+    return await this.service.readExperiencebyPortfolioId(portfolioId, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Put('experience/:id')
   async putExperience(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body() body: ExperienceDto,
     @CurrentUser() user: User,
   ) {
-    const experience: Experience = {
-      id,
-      ...body,
-      userId: user.id,
-    };
-    return await this.service.updateExperience(experience);
+    return await this.service.updateExperience(id, body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('experience/:id')
-  async deleteExperience(@Param(':id') id: string) {
-    return await this.service.deleteExperience(id);
+  async deleteExperience(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.deleteExperience(id, user.id);
   }
 
-  @Post()
-  async postPortfolio(@Body() body: PortfolioDto) {
-    return await this.service.createPortfolio(body);
+  @UseGuards(AuthGuard)
+  @Post('portfolio')
+  async postPortfolio(@Body() body: PortfolioDto, @CurrentUser() user: User) {
+    return await this.service.createPortfolio(body, user.id);
   }
 
-  @Get('/:id')
-  async getPortfolioById(@Param(':id') id: string) {
-    return await this.service.readPortfoliobyId(id);
+  @UseGuards(AuthGuard)
+  @Get('portfolio/:id')
+  async getPortfolioById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.readPortfoliobyId(id, user.id);
   }
 
-  @Put('/:id')
+  @UseGuards(AuthGuard)
+  @Put('portfolio/:id')
   async putPortfolio(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body() body: PortfolioDto,
     @CurrentUser() user: User,
   ) {
-    const portfolio: Portfolio = {
-      id,
-      ...body,
-      userId: user.id,
-    };
-    return await this.service.updatePortfolio(portfolio);
+    return await this.service.updatePortfolio(id, body, user.id);
   }
 
-  @Delete('/:id')
-  async deletePortfolio(@Param(':id') id: string) {
-    return await this.service.deletePortfolio(id);
+  @UseGuards(AuthGuard)
+  @Delete('portfolio/:id')
+  async deletePortfolio(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.deletePortfolio(id, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Post('skill')
-  async postSkill(@Body() body: SkillDto) {
-    return await this.service.createSkill(body);
+  async postSkill(@Body() body: SkillDto, @CurrentUser() user: User) {
+    return await this.service.createSkill(body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Get('skill/:id')
-  async getSkillById(@Param(':id') id: string) {
-    return await this.service.readSkillbyId(id);
+  async getSkillById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.readSkillbyId(id, user.id);
   }
 
   @Get('skill')
-  async getSkillByExperienceId(@Query(':experienceId') experienceId: string) {
-    return await this.service.readSkillbyExperienceId(experienceId);
+  async getSkillByExperienceId(
+    @Query(':experienceId') experienceId: string,
+    @CurrentUser() user: User,
+  ) {
+    return await this.service.readSkillbyExperienceId(experienceId, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Put('skill/:id')
   async putSkill(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body() body: SkillDto,
     @CurrentUser() user: User,
   ) {
-    const skill: Skill = {
-      id,
-      ...body,
-      userId: user.id,
-    };
-    return await this.service.updateSkill(skill);
+    return await this.service.updateSkill(id, body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('skill/:id')
-  async deleteSkill(@Param(':id') id: string) {
-    return await this.service.deleteSkill(id);
+  async deleteSkill(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.deleteSkill(id, user.id);
   }
 }

@@ -7,7 +7,7 @@ import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { PortfolioDto } from '../dto/portfolio.dto';
 
 export class CreatePortfolioCommand implements ICommand {
-  constructor(public portfolio: PortfolioDto) {}
+  constructor(public portfolio: PortfolioDto, public userId: string) {}
 }
 
 @CommandHandler(CreatePortfolioCommand)
@@ -20,12 +20,12 @@ export class CreatePortfolioCommandHandler
   ) {}
 
   async execute(command: CreatePortfolioCommand): Promise<Portfolio> {
-    const { portfolio } = command;
+    const { portfolio, userId } = command;
 
     if (!portfolio.owner) throw new BadRequestException('Nome não informado');
 		if (!portfolio.avatar) throw new BadRequestException('Avatar não fornecido');
 
-    const entity = this.repository.create(portfolio);
+    const entity = this.repository.create({ ...portfolio, userId });
     return await this.repository.save(entity);
   }
 }

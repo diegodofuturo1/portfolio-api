@@ -2,6 +2,7 @@ var fs = require('fs');
 
 const template = `
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { <Endpoint>Service } from './<endpoint>.service';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import {
@@ -13,6 +14,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { <entities> } from 'src/entity';
 import { <dtos> } from './dto';
@@ -28,40 +30,39 @@ export class <Endpoint>Controller {
 `;
 
 const functionsTemplate = `
+  @UseGuards(AuthGuard)
   @Post('<entity>')
-  async post<Entity>(@Body() body: <Entity>Dto) {
-    return await this.service.create<Entity>(body);
+  async post<Entity>(@Body() body: <Entity>Dto, @CurrentUser() user: User) {
+    return await this.service.create<Entity>(body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Get('<entity>/:id')
-  async get<Entity>ById(@Param(':id') id: string) {
-    return await this.service.read<Entity>byId(id);
+  async get<Entity>ById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.read<Entity>byId(id, user.id);
   }
   <optional>
+  @UseGuards(AuthGuard)
   @Put('<entity>/:id')
   async put<Entity>(
-    @Param(':id') id: string,
+    @Param('id') id: string,
     @Body() body: <Entity>Dto,
     @CurrentUser() user: User,
   ) {
-    const <entity>: <Entity> = {
-      id,
-      ...body,
-      userId: user.id,
-    };
-    return await this.service.update<Entity>(<entity>);
+    return await this.service.update<Entity>(id, body, user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('<entity>/:id')
-  async delete<Entity>(@Param(':id') id: string) {
-    return await this.service.delete<Entity>(id);
+  async delete<Entity>(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.delete<Entity>(id, user.id);
   }
 `;
 
 const optional = `
 @Get('<entity>')
-async get<Entity>By<Foreign>Id(@Query(':<foreign>Id') <foreign>Id: string) {
-  return await this.service.read<Entity>by<Foreign>Id(<foreign>Id);
+async get<Entity>By<Foreign>Id(@Query(':<foreign>Id') <foreign>Id: string, @CurrentUser() user: User) {
+  return await this.service.read<Entity>by<Foreign>Id(<foreign>Id, user.id);
 }
 `;
 
@@ -97,7 +98,7 @@ const execute = (entities, endpoint) => {
     .replace(new RegExp('<functions>', 'g'), params.functions.join('\n'));
 
   fs.writeFileSync(
-    `src/endpoint/${endpoint}/${endpoint}.auto-generated.controller.ts`,
+    `src/endpoint/${endpoint}/${endpoint}.controller.ts`,
     controller,
   );
 };

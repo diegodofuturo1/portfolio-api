@@ -9,7 +9,7 @@ import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { <entity>Dto } from '../dto/<name>.dto';
 
 export class Create<entity>Command implements ICommand {
-  constructor(public <name>: <entity>Dto) {}
+  constructor(public <name>: <entity>Dto, public userId: string) {}
 }
 
 @CommandHandler(Create<entity>Command)
@@ -22,11 +22,11 @@ export class Create<entity>CommandHandler
   ) {}
 
   async execute(command: Create<entity>Command): Promise<<entity>> {
-    const { <name> } = command;
+    const { <name>, userId } = command;
 
     <validations>
 
-    const entity = this.repository.create(<name>);
+    const entity = this.repository.create({ ...<name>, userId });
     return await this.repository.save(entity);
   }
 }

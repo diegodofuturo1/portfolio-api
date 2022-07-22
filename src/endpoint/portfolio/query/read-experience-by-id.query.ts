@@ -6,7 +6,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 export class ReadExperienceByIdQuery implements IQuery {
-  constructor(public readonly id: string) {}
+  constructor(public readonly id: string, public userId: string) {}
 }
 
 @QueryHandler(ReadExperienceByIdQuery)
@@ -19,11 +19,11 @@ export class ReadExperienceByIdQueryHandler
   ) {}
 
   async execute(query: ReadExperienceByIdQuery): Promise<any> {
-    const { id } = query;
+    const { id, userId } = query;
 
     if (!id) throw new BadRequestException('Id não informado');
 
-    const experience = await this.repository.findOne({ id });
+    const experience = await this.repository.findOne({ id, userId });
 
     if (!experience) throw new NotFoundException('Biografia não encontrada');
 

@@ -7,7 +7,7 @@ import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { AboutDto } from '../dto/about.dto';
 
 export class CreateAboutCommand implements ICommand {
-  constructor(public about: AboutDto) {}
+  constructor(public about: AboutDto, public userId: string) {}
 }
 
 @CommandHandler(CreateAboutCommand)
@@ -20,12 +20,12 @@ export class CreateAboutCommandHandler
   ) {}
 
   async execute(command: CreateAboutCommand): Promise<About> {
-    const { about } = command;
+    const { about, userId } = command;
 
     if (!about.title) throw new BadRequestException('Título não informado');
 		if (!about.content) throw new BadRequestException('Conteúdo não informado');
 
-    const entity = this.repository.create(about);
+    const entity = this.repository.create({ ...about, userId });
     return await this.repository.save(entity);
   }
 }

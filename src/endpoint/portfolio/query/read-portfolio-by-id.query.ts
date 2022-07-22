@@ -6,7 +6,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 export class ReadPortfolioByIdQuery implements IQuery {
-  constructor(public readonly id: string) {}
+  constructor(public readonly id: string, public userId: string) {}
 }
 
 @QueryHandler(ReadPortfolioByIdQuery)
@@ -19,11 +19,11 @@ export class ReadPortfolioByIdQueryHandler
   ) {}
 
   async execute(query: ReadPortfolioByIdQuery): Promise<any> {
-    const { id } = query;
+    const { id, userId } = query;
 
     if (!id) throw new BadRequestException('Id não informado');
 
-    const portfolio = await this.repository.findOne({ id });
+    const portfolio = await this.repository.findOne({ id, userId });
 
     if (!portfolio) throw new NotFoundException('Biografia não encontrada');
 

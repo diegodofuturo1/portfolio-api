@@ -5,7 +5,7 @@ import {
 import {
   ReadAboutByPortfolioIdQuery,
   ReadAboutByPortfolioIdQueryHandler,
-} from './read-about-by-portfolio-id-query';
+} from './read-about-by-portfolio-id.query';
 import {
   ReadEducationByIdQuery,
   ReadEducationByIdQueryHandler,
@@ -13,7 +13,7 @@ import {
 import {
   ReadEducationByPortfolioIdQuery,
   ReadEducationByPortfolioIdQueryHandler,
-} from './read-education-by-portfolio-id-query';
+} from './read-education-by-portfolio-id.query';
 import {
   ReadExperienceByIdQuery,
   ReadExperienceByIdQueryHandler,
@@ -21,7 +21,7 @@ import {
 import {
   ReadExperienceByPortfolioIdQuery,
   ReadExperienceByPortfolioIdQueryHandler,
-} from './read-experience-by-portfolio-id-query';
+} from './read-experience-by-portfolio-id.query';
 import {
   ReadPortfolioByIdQuery,
   ReadPortfolioByIdQueryHandler,
@@ -29,11 +29,11 @@ import {
 import {
   ReadSkillByExperienceIdQuery,
   ReadSkillByExperienceIdQueryHandler,
-} from './read-skill-by-experience-id-query';
+} from './read-skill-by-experience-id.query';
 import {
   ReadSkillByIdQuery,
   ReadSkillByIdQueryHandler,
-} from './read-skill-by-id-query';
+} from './read-skill-by-id.query';
 
 export default [
   ReadAboutByIdQueryHandler,

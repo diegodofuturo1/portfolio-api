@@ -7,7 +7,7 @@ import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { ExperienceDto } from '../dto/experience.dto';
 
 export class CreateExperienceCommand implements ICommand {
-  constructor(public experience: ExperienceDto) {}
+  constructor(public experience: ExperienceDto, public userId: string) {}
 }
 
 @CommandHandler(CreateExperienceCommand)
@@ -20,7 +20,7 @@ export class CreateExperienceCommandHandler
   ) {}
 
   async execute(command: CreateExperienceCommand): Promise<Experience> {
-    const { experience } = command;
+    const { experience, userId } = command;
 
     if (!experience.company) throw new BadRequestException('Empresa não informada');
 		if (!experience.role) throw new BadRequestException('Função/Cargo não informado');
@@ -30,7 +30,7 @@ export class CreateExperienceCommandHandler
 		if (!experience.to) throw new BadRequestException('Até não informado');
 		if (!experience.details) throw new BadRequestException('Detalhes não informado');
 
-    const entity = this.repository.create(experience);
+    const entity = this.repository.create({ ...experience, userId });
     return await this.repository.save(entity);
   }
 }

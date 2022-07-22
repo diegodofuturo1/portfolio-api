@@ -8,7 +8,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 export class Read<entity>ByIdQuery implements IQuery {
-  constructor(public readonly id: string) {}
+  constructor(public readonly id: string, public userId: string) {}
 }
 
 @QueryHandler(Read<entity>ByIdQuery)
@@ -21,11 +21,11 @@ export class Read<entity>ByIdQueryHandler
   ) {}
 
   async execute(query: Read<entity>ByIdQuery): Promise<any> {
-    const { id } = query;
+    const { id, userId } = query;
 
     if (!id) throw new BadRequestException('Id não informado');
 
-    const <name> = await this.repository.findOne({ id });
+    const <name> = await this.repository.findOne({ id, userId });
 
     if (!<name>) throw new NotFoundException('Biografia não encontrada');
 
@@ -43,11 +43,17 @@ const execute = (entity, path) => {
     .replace(new RegExp('<path>', 'g'), path);
 
   fs.writeFileSync(
-    `src/endpoint/${path}/query/read-${name}-by-id-query.ts`,
+    `src/endpoint/${path}/query/read-${name}-by-id.query.ts`,
     query,
+  );
+
+  console.log(
+    `[SUCESSO] - arquivo criado: src/endpoint/${path}/query/read-${name}-by-id.query.ts`,
   );
 };
 
+execute('About', 'portfolio');
 execute(`Education`, 'portfolio');
+execute('Experience', 'portfolio');
 execute(`Portfolio`, 'portfolio');
 execute(`Skill`, 'portfolio');
