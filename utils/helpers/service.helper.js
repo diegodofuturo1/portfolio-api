@@ -9,7 +9,7 @@ import { <query> } from './query';
 import { <command> } from './command';
 
 @Injectable()
-export class PortfolioService {
+export class <Path>Service {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -44,7 +44,8 @@ async read<Entity>by<Foreign>Id(id: string, userId: string): Promise<<Entity>> {
 }
 `;
 
-const execute = (entities, path) => {
+const execute = (entities, Path) => {
+  const path = Path.toLocaleLowerCase();
   const params = {
     dtos: [],
     entities: [],
@@ -56,7 +57,7 @@ const execute = (entities, path) => {
   for (const _entity of entities) {
     const { Entity, Foreign } = _entity;
     const entity = Entity.toLocaleLowerCase();
-    const foreign = Foreign.toLocaleLowerCase();
+    const foreign = Foreign?.toLocaleLowerCase();
 
     params.dtos.push(`${Entity}Dto`);
     params.entities.push(Entity);
@@ -81,18 +82,13 @@ const execute = (entities, path) => {
     .replace(new RegExp('<entities>', 'g'), params.entities.join(', '))
     .replace(new RegExp('<command>', 'g'), params.commands.join(', '))
     .replace(new RegExp('<query>', 'g'), params.querys.join(', '))
-    .replace(new RegExp('<functions>', 'g'), params.functions.join('\n'));
+    .replace(new RegExp('<functions>', 'g'), params.functions.join('\n'))
+    .replace(new RegExp('<Path>', 'g'), Path);
 
   fs.writeFileSync(`src/endpoint/${path}/${path}.service.ts`, service);
 };
 
 execute(
-  [
-    { Entity: 'About', Foreign: 'Portfolio' },
-    { Entity: 'Education', Foreign: 'Portfolio' },
-    { Entity: 'Experience', Foreign: 'Portfolio' },
-    { Entity: 'Portfolio', Foreign: '' },
-    { Entity: 'Skill', Foreign: 'Experience' },
-  ],
-  'portfolio',
+  [{ Entity: 'Endpoint' }, { Entity: 'Param', Foreign: 'Endpoint' }],
+  'Request',
 );

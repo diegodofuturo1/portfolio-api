@@ -54,7 +54,5 @@ const execute = (Entity, Foreign, path) => {
   );
 };
 
-execute(`About`, 'Portfolio', 'portfolio');
-execute(`Education`, 'Portfolio', 'portfolio');
-execute(`Experience`, 'Portfolio', 'portfolio');
-execute(`Skill`, 'Experience', 'portfolio');
+execute(`Endpoint`, '', 'request');
+execute(`Param`, 'Endpoint', 'request');

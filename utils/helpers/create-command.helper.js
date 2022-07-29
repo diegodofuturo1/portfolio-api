@@ -55,33 +55,8 @@ const execute = (entity, path, validations) => {
   );
 };
 
-execute('About', 'portfolio', {
-  title: 'Título não informado',
-  content: 'Conteúdo não informado',
-});
-execute('Education', 'portfolio', {
-  school: 'Escola/Faculdade não informada',
-  classroom: 'Curso não informado',
-  image: 'Image não fornecida',
-  nivel: 'Nível não informado',
-  duration: 'Duração não informado',
-  period: 'Período não informado',
-  details: 'Detalhes não informado',
-});
-execute('Experience', 'portfolio', {
-  company: 'Empresa não informada',
-  role: 'Função/Cargo não informado',
-  image: 'Imagem não fornecida',
-  duration: 'Duração não informada',
-  from: 'De não informado',
-  to: 'Até não informado',
-  details: 'Detalhes não informado',
-});
-execute('Portfolio', 'portfolio', {
-  owner: 'Nome não informado',
-  avatar: 'Avatar não fornecido',
-});
-execute('Skill', 'portfolio', {
-  skill: 'Habilidade não informada',
-  rating: 'Avaliação não informada',
+execute('Param', 'request', {
+  key: 'Chave não informado',
+  value: 'Valor não informado',
+  type: 'Tipo não informado',
 });

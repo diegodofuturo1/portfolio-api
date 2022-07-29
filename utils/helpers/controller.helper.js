@@ -105,11 +105,8 @@ const execute = (entities, endpoint) => {
 
 execute(
   [
-    { Entity: 'About', Foreign: 'Portfolio' },
-    { Entity: 'Education', Foreign: 'Portfolio' },
-    { Entity: 'Experience', Foreign: 'Portfolio' },
-    { Entity: 'Portfolio', Foreign: '' },
-    { Entity: 'Skill', Foreign: 'Experience' },
+    { Entity: 'Param', Foreign: 'Endpoint' },
+    { Entity: 'Endpoint', Foreign: '' },
   ],
-  'Portfolio',
+  'Request',
 );

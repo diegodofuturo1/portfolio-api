@@ -43,8 +43,5 @@ const execute = (entity, path) => {
   );
 };
 
-execute('About', 'portfolio');
-execute('Education', 'portfolio');
-execute('Experience', 'portfolio');
-execute('Portfolio', 'portfolio');
-execute('Skill', 'portfolio');
+execute('Endpoint', 'request');
+execute('Param', 'request');
