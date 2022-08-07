@@ -27,14 +27,19 @@ export class RequestController {
     return await this.service.createParam(body, user.id);
   }
 
+  @Get('param')
+  async getParam(@CurrentUser() user: User) {
+    return await this.service.readParam(user.id);
+  }
+
   @Get('param/:id')
   async getParamById(@Param('id') id: string, @CurrentUser() user: User) {
     return await this.service.readParambyId(id, user.id);
   }
 
-  @Get('param')
+  @Get('param/byEndpoint/:endpointId')
   async getParamByEndpointId(
-    @Query(':endpointId') endpointId: string,
+    @Param(':endpointId') endpointId: string,
     @CurrentUser() user: User,
   ) {
     return await this.service.readParambyEndpointId(endpointId, user.id);
@@ -57,6 +62,11 @@ export class RequestController {
   @Post('endpoint')
   async postEndpoint(@Body() body: EndpointDto, @CurrentUser() user: User) {
     return await this.service.createEndpoint(body, user.id);
+  }
+
+  @Get('endpoint')
+  async getEndpoint(@CurrentUser() user: User) {
+    return await this.service.readEndpoint(user.id);
   }
 
   @Get('endpoint/:id')
