@@ -1,4 +1,3 @@
-
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
@@ -23,11 +22,9 @@ export class CreateParamCommandHandler
     const { param, userId } = command;
 
     if (!param.key) throw new BadRequestException('Chave não informado');
-		if (!param.value) throw new BadRequestException('Valor não informado');
-		if (!param.type) throw new BadRequestException('Tipo não informado');
+    if (!param.type) throw new BadRequestException('Tipo não informado');
 
     const entity = this.repository.create({ ...param, userId });
     return await this.repository.save(entity);
   }
 }
-

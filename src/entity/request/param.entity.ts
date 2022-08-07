@@ -15,8 +15,5 @@ export class Param {
   key: string;
 
   @Column()
-  value: string;
-
-  @Column()
   type: string;
 }

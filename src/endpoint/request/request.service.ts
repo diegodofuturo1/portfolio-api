@@ -15,6 +15,8 @@ import {
   DeleteParamCommand,
   UpdateParamCommand,
 } from './command';
+import { ReadEndpointQuery } from './query/read-endpoint.query';
+import { ReadParamQuery } from './query/read-param.query';
 
 @Injectable()
 export class RequestService {
@@ -30,6 +32,10 @@ export class RequestService {
     return await this.commandBus.execute(
       new CreateEndpointCommand(endpoint, userId),
     );
+  }
+
+  async readEndpoint(userId: string): Promise<Endpoint> {
+    return await this.queryBus.execute(new ReadEndpointQuery(userId));
   }
 
   async readEndpointbyId(id: string, userId: string): Promise<Endpoint> {
@@ -54,6 +60,10 @@ export class RequestService {
 
   async createParam(param: ParamDto, userId: string): Promise<Param> {
     return await this.commandBus.execute(new CreateParamCommand(param, userId));
+  }
+
+  async readParam(userId: string): Promise<Param> {
+    return await this.queryBus.execute(new ReadParamQuery(userId));
   }
 
   async readParambyId(id: string, userId: string): Promise<Param> {

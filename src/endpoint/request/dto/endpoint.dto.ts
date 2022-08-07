@@ -4,10 +4,6 @@ import { IsString } from 'class-validator';
 export class EndpointDto {
   @ApiProperty()
   @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsString()
   path: string;
 
   @ApiProperty()

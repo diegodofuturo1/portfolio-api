@@ -9,9 +9,6 @@ export class Endpoint {
   userId: string;
 
   @Column()
-  name: string;
-
-  @Column()
   path: string;
 
   @Column()

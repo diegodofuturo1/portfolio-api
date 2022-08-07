@@ -21,7 +21,6 @@ export class CreateEndpointCommandHandler
   async execute(command: CreateEndpointCommand): Promise<Endpoint> {
     const { endpoint, userId } = command;
 
-    if (!endpoint.name) throw new BadRequestException('Nome não informado');
     if (!endpoint.path) throw new BadRequestException('Path não informado');
     if (!endpoint.method) throw new BadRequestException('Método não informado');
     if (!endpoint.permission)
