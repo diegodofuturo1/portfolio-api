@@ -17,4 +17,8 @@ export class UserDto {
   @ApiProperty()
   @IsString()
   avatar: string;
+
+  @ApiProperty()
+  @IsString()
+  token: string;
 }

@@ -1,20 +1,17 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { promisify } from 'util';
+import { UserDto } from './dto/user.dto';
+import { JwtService } from '@nestjs/jwt';
+import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
+import { User } from 'src/entity/user.entity';
 import { UserService } from '../users/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
-import { promisify } from 'util';
-import { User } from 'src/entity/user.entity';
-import { SignInDto } from './dto/signin.dto';
-import { UserDto } from './dto/user.dto';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 
 const scrypt = promisify(_scrypt);
 @Injectable()
 export class AuthService {
-  constructor(private users: UserService) {}
+  constructor(private users: UserService, private jwt: JwtService) {}
 
   async emailIsAvailable(email: string) {
     try {
@@ -31,6 +28,29 @@ export class AuthService {
     const hash = promise as Buffer;
     const encript = `${salt}.${hash.toString('hex')}`;
     return encript;
+  }
+
+  async dencriptPassword(user: User, password: string) {
+    const [salt, hash] = user.password.split('.');
+
+    const promise = await scrypt(password, salt, 32);
+    const decrypted = promise as Buffer;
+
+    if (decrypted.toString('hex') != hash) throw new BadRequestException('Senha inválida!');
+
+    return decrypted;
+  }
+
+  signToken(user: User) {
+    return this.jwt.sign({ sub: user.id, email: user.email });
+  }
+
+  verifyToken(token: string) {
+    return this.jwt.verify(token);
+  }
+
+  decodeToken(token: string) {
+    return this.jwt.decode(token) as User;
   }
 
   async signup(request: SignUpDto): Promise<UserDto> {
@@ -53,6 +73,7 @@ export class AuthService {
       id: user.id,
       name: user.name,
       avatar: user.avatar,
+      token: this.signToken(user),
     };
   }
 
@@ -63,19 +84,14 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('usuário não encontrado!');
 
-    const [salt, hash] = user.password.split('.');
-
-    const promise = await scrypt(password, salt, 32);
-    const decrypted = promise as Buffer;
-
-    if (decrypted.toString('hex') != hash)
-      throw new BadRequestException('Senha inválida!');
+    this.dencriptPassword(user, password);
 
     return {
       email: user.email,
       id: user.id,
       name: user.name,
       avatar: user.avatar,
+      token: this.jwt.sign({ sub: user.id, email: user.email }),
     };
   }
 

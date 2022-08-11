@@ -6,9 +6,10 @@ import { RequestService } from './request.service';
 import { RequestController } from './request.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature(Entity)],
+  imports: [CqrsModule, TypeOrmModule.forFeature(Entity), AuthModule],
   controllers: [RequestController],
   providers: [RequestService, ...Querys, ...Commands],
   exports: [RequestService],

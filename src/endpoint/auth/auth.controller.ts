@@ -1,29 +1,23 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Session,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Session, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import { HttpResponseDto as ResponseDto } from 'src/endpoint/auth/dto/response.dto';
 import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
 import { User } from 'src/entity/user.entity';
-import { AuthGuard } from 'src/guard/auth.guard';
 import { AuthService } from './auth.service';
+import { AuthGuard } from 'src/guard/auth.guard';
+import { PublicGuard } from 'src/guard/public.guard';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
+  @UseGuards(PublicGuard)
   @Post('/signup')
-  async signup(@Body() body: SignUpDto, @Session() session: any) {
+  async signup(@Body() body: SignUpDto) {
     const user = await this.service.signup(body);
-    session.userId = user.id;
 
     return new ResponseDto()
       .setCode(201)
@@ -32,6 +26,7 @@ export class AuthController {
       .send();
   }
 
+  @UseGuards(PublicGuard)
   @Post('signin')
   async signin(@Body() body: SignInDto, @Session() session: any) {
     const user = await this.service.signin(body);
@@ -44,14 +39,10 @@ export class AuthController {
       .send();
   }
 
+  @UseGuards(AuthGuard)
   @Post('signout')
-  signout(@Session() session: any) {
-    session.userId = null;
-
-    return new ResponseDto()
-      .setCode(200)
-      .setMessage('Usuário deslogado com sucesso!')
-      .send();
+  signout() {
+    return new ResponseDto().setCode(200).setMessage('Usuário deslogado com sucesso!').send();
   }
 
   @UseGuards(AuthGuard)

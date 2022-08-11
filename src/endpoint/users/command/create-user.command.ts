@@ -11,9 +11,7 @@ export class CreateUserCommand implements ICommand {
 }
 
 @CommandHandler(CreateUserCommand)
-export class CreateUserCommandHandler
-  implements ICommandHandler<CreateUserCommand>
-{
+export class CreateUserCommandHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
@@ -27,6 +25,6 @@ export class CreateUserCommandHandler
     if (!user.password) throw new BadRequestException('Senha não informada');
 
     const entity = this.repository.create(user);
-    return await this.repository.save(entity);
+    return await this.repository.save({ ...entity, token: `` });
   }
 }

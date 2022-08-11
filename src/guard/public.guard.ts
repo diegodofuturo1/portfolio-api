@@ -1,22 +1,21 @@
 import 'dotenv/config';
-import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { AuthService } from 'src/endpoint/auth/auth.service';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
-export class AdminGuard implements CanActivate {
+@Injectable()
+export class PublicGuard implements CanActivate {
   constructor(private readonly auth: AuthService) {}
 
   canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const { token } = request.headers || {};
+    request.user = { id: process.env.ADMIN_KEY_ACCESS };
 
     if (token) {
-      const auth = this.auth.verifyToken(token);
       const user = this.auth.decodeToken(token);
-
-      request.auth = auth && user.id == process.env.ADMIN_KEY_ACCESS;
       request.user = user;
     }
 
-    return request.auth;
+    return true;
   }
 }
