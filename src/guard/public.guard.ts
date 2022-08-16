@@ -11,10 +11,12 @@ export class PublicGuard implements CanActivate {
     const { token } = request.headers || {};
     request.user = { id: process.env.ADMIN_KEY_ACCESS };
 
-    if (token) {
-      const user = this.auth.decodeToken(token);
-      request.user = user;
-    }
+    try {
+      if (token) {
+        const user = this.auth.decodeToken(token);
+        request.user = user;
+      }
+    } catch {}
 
     return true;
   }

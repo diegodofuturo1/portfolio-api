@@ -17,7 +17,7 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
     private readonly repository: Repository<User>,
   ) {}
 
-  async execute(command: CreateUserCommand): Promise<UserDto> {
+  async execute(command: CreateUserCommand): Promise<User> {
     const { user } = command;
 
     if (!user.name) throw new BadRequestException('Nome não informado');
@@ -25,6 +25,6 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
     if (!user.password) throw new BadRequestException('Senha não informada');
 
     const entity = this.repository.create(user);
-    return await this.repository.save({ ...entity, token: `` });
+    return await this.repository.save({ ...entity });
   }
 }

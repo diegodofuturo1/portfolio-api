@@ -6,17 +6,21 @@ export class AdminGuard implements CanActivate {
   constructor(private readonly auth: AuthService) {}
 
   canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    const { token } = request.headers || {};
+    try {
+      const request = context.switchToHttp().getRequest();
+      const { token } = request.headers || {};
 
-    if (token) {
-      const auth = this.auth.verifyToken(token);
-      const user = this.auth.decodeToken(token);
+      if (token) {
+        const auth = this.auth.verifyToken(token);
+        const user = this.auth.decodeToken(token);
 
-      request.auth = auth && user.id == process.env.ADMIN_KEY_ACCESS;
-      request.user = user;
+        request.auth = auth && user.sub == process.env.ADMIN_KEY_ACCESS;
+        request.user = user;
+      }
+
+      return request.auth;
+    } catch {
+      return false;
     }
-
-    return request.auth;
   }
 }

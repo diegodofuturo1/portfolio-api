@@ -6,6 +6,7 @@ import { SignUpDto } from './dto/signup.dto';
 import { User } from 'src/entity/user.entity';
 import { UserService } from '../users/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { CurrentUser } from 'src/decorator/current-user.decorator';
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 
 const scrypt = promisify(_scrypt);
@@ -36,9 +37,11 @@ export class AuthService {
     const promise = await scrypt(password, salt, 32);
     const decrypted = promise as Buffer;
 
-    if (decrypted.toString('hex') != hash) throw new BadRequestException('Senha inválida!');
-
-    return decrypted;
+    return {
+      hash,
+      decrypted: decrypted.toString('hex'),
+      correct: decrypted.toString('hex') == hash,
+    };
   }
 
   signToken(user: User) {
@@ -50,7 +53,7 @@ export class AuthService {
   }
 
   decodeToken(token: string) {
-    return this.jwt.decode(token) as User;
+    return this.jwt.decode(token) as CurrentUser;
   }
 
   async signup(request: SignUpDto): Promise<UserDto> {
@@ -68,12 +71,17 @@ export class AuthService {
       password: encripted,
     });
 
+    const token = this.signToken(user);
+    const { iat, exp } = this.decodeToken(token);
+
     return {
       email: user.email,
       id: user.id,
       name: user.name,
       avatar: user.avatar,
-      token: this.signToken(user),
+      token,
+      iat,
+      exp,
     };
   }
 
@@ -84,18 +92,36 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('usuário não encontrado!');
 
-    this.dencriptPassword(user, password);
+    const dencriptPassword = await this.dencriptPassword(user, password);
 
+    if (!dencriptPassword.correct) {
+      throw new BadRequestException('Senha Inválida');
+    }
+
+    const token = this.jwt.sign({ sub: user.id, email: user.email });
+    const { iat, exp } = this.decodeToken(token);
     return {
       email: user.email,
       id: user.id,
       name: user.name,
       avatar: user.avatar,
-      token: this.jwt.sign({ sub: user.id, email: user.email }),
+      token,
+      iat,
+      exp,
     };
   }
 
-  async whoami(id: string) {
-    return await this.users.getUserById(id);
+  async whoami(currentUser: CurrentUser) {
+    const user: User = await this.users.getUserById(currentUser.sub);
+
+    return {
+      id: user.id,
+      email: user.email,
+      avatar: user.avatar,
+      name: user.name,
+      exp: currentUser.exp,
+      iat: currentUser.iat,
+      token: currentUser.token,
+    };
   }
 }
