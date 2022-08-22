@@ -78,4 +78,27 @@ export class RequestController {
   async deleteEndpoint(@Param('id') id: string, @CurrentUser() user: User) {
     return await this.service.deleteEndpoint(id, user.id);
   }
+
+  @UseGuards(PublicGuard)
+  @Get('test/init')
+  async initTest(@CurrentUser() user: User) {
+    try {
+      await this.service.initTest(user.id);
+    } catch {}
+    return {
+      code: 200,
+    };
+  }
+
+  @UseGuards(PublicGuard)
+  @Get('test')
+  async getTeste(@CurrentUser() user: User) {
+    return await this.service.getTests(user.id);
+  }
+
+  @UseGuards(PublicGuard)
+  @Get('test/param/:testId')
+  async getTesteParam(@Param('testId') testId: string, @CurrentUser() user: User) {
+    return await this.service.getTestParam(testId, user.id);
+  }
 }

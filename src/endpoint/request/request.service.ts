@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Endpoint, Param } from 'src/entity';
 import { EndpointDto, ParamDto } from './dto';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { UserService } from '../users/user.service';
+import { Endpoint, Param, Test, TestParam } from 'src/entity';
+import { ReadTestParamQuery } from './query/read-test-param.query';
 import {
+  ReadEndpointQuery,
+  ReadParamQuery,
+  ReadTestQuery,
   ReadEndpointByIdQuery,
   ReadParamByIdQuery,
   ReadParamByEndpointIdQuery,
@@ -15,23 +20,17 @@ import {
   DeleteParamCommand,
   UpdateParamCommand,
 } from './command';
-import { ReadEndpointQuery } from './query/read-endpoint.query';
-import { ReadParamQuery } from './query/read-param.query';
 
 @Injectable()
 export class RequestService {
   constructor(
+    private users: UserService,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
 
-  async createEndpoint(
-    endpoint: EndpointDto,
-    userId: string,
-  ): Promise<Endpoint> {
-    return await this.commandBus.execute(
-      new CreateEndpointCommand(endpoint, userId),
-    );
+  async createEndpoint(endpoint: EndpointDto, userId: string): Promise<Endpoint> {
+    return await this.commandBus.execute(new CreateEndpointCommand(endpoint, userId));
   }
 
   async readEndpoint(userId: string): Promise<Endpoint> {
@@ -42,11 +41,7 @@ export class RequestService {
     return await this.queryBus.execute(new ReadEndpointByIdQuery(id, userId));
   }
 
-  async updateEndpoint(
-    id: string,
-    endpoint: EndpointDto,
-    userId: string,
-  ): Promise<Endpoint> {
+  async updateEndpoint(id: string, endpoint: EndpointDto, userId: string): Promise<Endpoint> {
     const _endpoint = await this.readEndpointbyId(id, userId);
     return await this.commandBus.execute(
       new UpdateEndpointCommand(_endpoint, { ...endpoint, id, userId }),
@@ -71,16 +66,10 @@ export class RequestService {
   }
 
   async readParambyEndpointId(id: string, userId: string): Promise<Param> {
-    return await this.queryBus.execute(
-      new ReadParamByEndpointIdQuery(id, userId),
-    );
+    return await this.queryBus.execute(new ReadParamByEndpointIdQuery(id, userId));
   }
 
-  async updateParam(
-    id: string,
-    param: ParamDto,
-    userId: string,
-  ): Promise<Param> {
+  async updateParam(id: string, param: ParamDto, userId: string): Promise<Param> {
     const _param = await this.readParambyId(id, userId);
     return await this.commandBus.execute(
       new UpdateParamCommand(_param, {
@@ -95,5 +84,25 @@ export class RequestService {
   async deleteParam(id: string, userId: string): Promise<Param> {
     const _param = await this.readParambyId(id, userId);
     return await this.commandBus.execute(new DeleteParamCommand(_param));
+  }
+
+  async initTest(userId: string): Promise<void> {
+    await this.users.deleteUserByEmail('teste@teste.com', userId);
+  }
+
+  async getTests(userId: string): Promise<Test> {
+    return await this.queryBus.execute(new ReadTestQuery(userId));
+  }
+
+  async getTestParam(testId: string, userId: string) {
+    const params: TestParam[] = await this.queryBus.execute(new ReadTestParamQuery(testId, userId));
+    const promises = params.map(async (param) => {
+      const promise = await this.readParambyId(param.paramId, userId);
+      return {
+        ...promise,
+        ...param,
+      };
+    });
+    return await Promise.all(promises);
   }
 }

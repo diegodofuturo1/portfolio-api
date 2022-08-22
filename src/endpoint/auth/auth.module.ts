@@ -13,12 +13,10 @@ const GlobalCurrentUserInterceptor = {
   useClass: CurrentUserInterceptor,
 };
 
+const jwtOptions = { secret: process.env.SECRET, signOptions: { expiresIn: `3600s` } };
+
 @Module({
-  imports: [
-    UserModule,
-    JwtModule.register({ secret: process.env.SECRET, signOptions: { expiresIn: `3600s` } }),
-    PassportModule,
-  ],
+  imports: [UserModule, JwtModule.register(jwtOptions), PassportModule],
   controllers: [AuthController],
   providers: [AuthService, GlobalCurrentUserInterceptor],
   exports: [AuthService],
