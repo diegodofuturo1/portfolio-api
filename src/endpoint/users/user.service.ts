@@ -5,6 +5,8 @@ import { ReadUserByIdQuery } from './query/read-user-by-id.query';
 import { ReadUserByEmailQuery } from './query/read-user-by-email.query';
 import { SignUpDto } from '../auth/dto/signup.dto';
 import { DeleteUserCommand } from './command/delete-user.command';
+import { UserPreferencesDto } from '../auth/dto/user-change.dto';
+import { UpdateUserCommand } from './command/update-user.command';
 
 @Injectable()
 export class UserService {
@@ -25,5 +27,10 @@ export class UserService {
   async deleteUserByEmail(email: string, userId: string) {
     const user = await this.getUserByEmail(email);
     return await this.commandBus.execute(new DeleteUserCommand(user));
+  }
+
+  async updatePreferencesUser(preferences: UserPreferencesDto, userId: string) {
+    const user = await this.getUserById(userId);
+    return await this.commandBus.execute(new UpdateUserCommand(user, preferences));
   }
 }

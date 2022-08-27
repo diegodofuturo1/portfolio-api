@@ -8,6 +8,7 @@ import { UserService } from '../users/user.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { UserPreferencesDto } from './dto/user-change.dto';
 
 const scrypt = promisify(_scrypt);
 @Injectable()
@@ -79,6 +80,7 @@ export class AuthService {
       id: user.id,
       name: user.name,
       avatar: user.avatar,
+      theme: user.theme,
       token,
       iat,
       exp,
@@ -105,6 +107,7 @@ export class AuthService {
       id: user.id,
       name: user.name,
       avatar: user.avatar,
+      theme: user.theme,
       token,
       iat,
       exp,
@@ -119,9 +122,14 @@ export class AuthService {
       email: user.email,
       avatar: user.avatar,
       name: user.name,
+      theme: user.theme,
       exp: currentUser.exp,
       iat: currentUser.iat,
       token: currentUser.token,
     };
+  }
+
+  async updateUserPreferences(preferences: UserPreferencesDto, userId: string) {
+    return await this.users.updatePreferencesUser(preferences, userId);
   }
 }

@@ -14,6 +14,9 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: 'https://joeschmoe.io/api/v1/random' })
   avatar: string;
+
+  @Column({ default: 'gray' })
+  theme: string;
 }

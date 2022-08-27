@@ -29,4 +29,8 @@ export class UserDto {
   @ApiProperty()
   @IsNumber()
   exp: number;
+
+  @ApiProperty()
+  @IsString()
+  theme: string;
 }

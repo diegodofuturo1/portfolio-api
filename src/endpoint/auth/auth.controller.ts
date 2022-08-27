@@ -6,7 +6,9 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { PublicGuard } from 'src/guard/public.guard';
 import { CurrentUser } from 'src/decorator/current-user.decorator';
 import { HttpResponseDto } from 'src/endpoint/auth/dto/response.dto';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { UserPreferencesDto } from './dto/user-change.dto';
+import { User } from 'src/entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -57,5 +59,11 @@ export class AuthController {
     } catch {
       return new HttpResponseDto().setCode(200).setMessage('Nenhum usuário logado!').send();
     }
+  }
+
+  @UseGuards(AuthGuard)
+  @Put(`preferences`)
+  async userPreferencesChange(@Body() body: UserPreferencesDto, @CurrentUser() user: CurrentUser) {
+    return await this.service.updateUserPreferences(body, user.sub);
   }
 }
