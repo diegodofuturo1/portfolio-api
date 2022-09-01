@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsNumber, IsPositive, IsString, Max, Min } from 'class-validator';
 
 export class SkillDto {
   @ApiProperty()
@@ -17,4 +17,8 @@ export class SkillDto {
   @Min(1)
   @Max(5)
   rating: number;
+
+  @ApiProperty()
+  @IsPositive()
+  order: number;
 }

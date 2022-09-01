@@ -7,9 +7,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 function sweggerConfig(app: INestApplication) {
   const config = new DocumentBuilder()
     .setTitle('Calculator API')
-    .setDescription('The Calculator API description')
+    .setDescription('The portfolio API description')
     .setVersion('1.0')
-    .addTag('calculator')
+    .addTag('portfolio')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

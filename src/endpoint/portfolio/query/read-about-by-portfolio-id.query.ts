@@ -1,9 +1,9 @@
-
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { About } from 'src/entity/portfolio/about.entity';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { alphanumericSorter } from 'utils/order';
 
 export class ReadAboutByPortfolioIdQuery implements IQuery {
   constructor(public readonly portfolioId: string, public userId: string) {}
@@ -25,7 +25,6 @@ export class ReadAboutByPortfolioIdQueryHandler
 
     const about = await this.repository.find({ portfolioId, userId });
 
-    return about;
+    return about.sort(alphanumericSorter);
   }
 }
-

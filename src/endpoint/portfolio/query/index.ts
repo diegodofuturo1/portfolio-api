@@ -1,7 +1,4 @@
-import {
-  ReadAboutByIdQuery,
-  ReadAboutByIdQueryHandler,
-} from './read-about-by-id.query';
+import { ReadAboutByIdQuery, ReadAboutByIdQueryHandler } from './read-about-by-id.query';
 import {
   ReadAboutByPortfolioIdQuery,
   ReadAboutByPortfolioIdQueryHandler,
@@ -26,14 +23,12 @@ import {
   ReadPortfolioByIdQuery,
   ReadPortfolioByIdQueryHandler,
 } from './read-portfolio-by-id.query';
+import { ReadPortfolioQueryHandler, ReadPortfolioQuery } from './read-portfolio.query';
 import {
   ReadSkillByExperienceIdQuery,
   ReadSkillByExperienceIdQueryHandler,
 } from './read-skill-by-experience-id.query';
-import {
-  ReadSkillByIdQuery,
-  ReadSkillByIdQueryHandler,
-} from './read-skill-by-id.query';
+import { ReadSkillByIdQuery, ReadSkillByIdQueryHandler } from './read-skill-by-id.query';
 
 export default [
   ReadAboutByIdQueryHandler,
@@ -42,6 +37,7 @@ export default [
   ReadEducationByPortfolioIdQueryHandler,
   ReadExperienceByIdQueryHandler,
   ReadExperienceByPortfolioIdQueryHandler,
+  ReadPortfolioQueryHandler,
   ReadPortfolioByIdQueryHandler,
   ReadSkillByIdQueryHandler,
   ReadSkillByExperienceIdQueryHandler,
@@ -54,6 +50,7 @@ export {
   ReadEducationByPortfolioIdQuery,
   ReadExperienceByIdQuery,
   ReadExperienceByPortfolioIdQuery,
+  ReadPortfolioQuery,
   ReadPortfolioByIdQuery,
   ReadSkillByIdQuery,
   ReadSkillByExperienceIdQuery,
@@ -63,6 +60,7 @@ export {
   ReadEducationByPortfolioIdQueryHandler,
   ReadExperienceByIdQueryHandler,
   ReadExperienceByPortfolioIdQueryHandler,
+  ReadPortfolioQueryHandler,
   ReadPortfolioByIdQueryHandler,
   ReadSkillByIdQueryHandler,
   ReadSkillByExperienceIdQueryHandler,

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { Test } from 'src/entity/request/test.entity';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { alphanumericSorter } from 'utils/order';
 
 export class ReadTestQuery implements IQuery {
   constructor(public userId: string) {}
@@ -22,6 +23,6 @@ export class ReadTestQueryHandler implements IQueryHandler<ReadTestQuery> {
 
     if (!test) throw new NotFoundException('Parâmetro não encontrado');
 
-    return test.sort((a, b) => a.order - b.order);
+    return test.sort(alphanumericSorter);
   }
 }

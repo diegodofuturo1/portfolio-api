@@ -1,9 +1,9 @@
-
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
 import { Education } from 'src/entity/portfolio/education.entity';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { alphanumericSorter } from 'utils/order';
 
 export class ReadEducationByPortfolioIdQuery implements IQuery {
   constructor(public readonly portfolioId: string, public userId: string) {}
@@ -25,7 +25,6 @@ export class ReadEducationByPortfolioIdQueryHandler
 
     const education = await this.repository.find({ portfolioId, userId });
 
-    return education;
+    return education.sort(alphanumericSorter);
   }
 }
-

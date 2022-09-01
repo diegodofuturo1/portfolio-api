@@ -29,6 +29,9 @@ export class Education {
   @Column()
   period: string;
 
-  @Column()
+  @Column({ length: 1000 })
   details: string;
+
+  @Column()
+  order: number;
 }

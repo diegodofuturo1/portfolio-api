@@ -120,34 +120,6 @@ export class PortfolioController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('portfolio')
-  async postPortfolio(@Body() body: PortfolioDto, @CurrentUser() user: User) {
-    return await this.service.createPortfolio(body, user.id);
-  }
-
-  @UseGuards(PublicGuard)
-  @Get('portfolio/:id')
-  async getPortfolioById(@Param('id') id: string, @CurrentUser() user: User) {
-    return await this.service.readPortfoliobyId(id, user.id);
-  }
-
-  @UseGuards(AuthGuard)
-  @Put('portfolio/:id')
-  async putPortfolio(
-    @Param('id') id: string,
-    @Body() body: PortfolioDto,
-    @CurrentUser() user: User,
-  ) {
-    return await this.service.updatePortfolio(id, body, user.id);
-  }
-
-  @UseGuards(AuthGuard)
-  @Delete('portfolio/:id')
-  async deletePortfolio(@Param('id') id: string, @CurrentUser() user: User) {
-    return await this.service.deletePortfolio(id, user.id);
-  }
-
-  @UseGuards(AuthGuard)
   @Post('skill')
   async postSkill(@Body() body: SkillDto, @CurrentUser() user: User) {
     return await this.service.createSkill(body, user.id);
@@ -178,5 +150,39 @@ export class PortfolioController {
   @Delete('skill/:id')
   async deleteSkill(@Param('id') id: string, @CurrentUser() user: User) {
     return await this.service.deleteSkill(id, user.id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post()
+  async postPortfolio(@Body() body: PortfolioDto, @CurrentUser() user: User) {
+    return await this.service.createPortfolio(body, user.id);
+  }
+
+  @UseGuards(PublicGuard)
+  @Get()
+  async getPortfolio(@CurrentUser() user: User) {
+    return await this.service.readPortfolio(user.id);
+  }
+
+  @UseGuards(PublicGuard)
+  @Get('/:id')
+  async getPortfolioById(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.readPortfoliobyId(id, user.id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('/:id')
+  async putPortfolio(
+    @Param('id') id: string,
+    @Body() body: PortfolioDto,
+    @CurrentUser() user: User,
+  ) {
+    return await this.service.updatePortfolio(id, body, user.id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('/:id')
+  async deletePortfolio(@Param('id') id: string, @CurrentUser() user: User) {
+    return await this.service.deletePortfolio(id, user.id);
   }
 }

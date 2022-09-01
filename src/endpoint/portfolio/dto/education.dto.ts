@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsPositive, IsString } from 'class-validator';
 
 export class EducationDto {
   @ApiProperty()
@@ -33,4 +33,8 @@ export class EducationDto {
   @ApiProperty()
   @IsString()
   details: string;
+
+  @ApiProperty()
+  @IsPositive()
+  order: number;
 }

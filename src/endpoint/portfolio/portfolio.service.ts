@@ -12,6 +12,7 @@ import {
   ReadPortfolioByIdQuery,
   ReadSkillByIdQuery,
   ReadSkillByExperienceIdQuery,
+  ReadPortfolioQuery,
 } from './query';
 import {
   CreateAboutCommand,
@@ -115,6 +116,10 @@ export class PortfolioService {
 
   async readPortfoliobyId(id: string, userId: string): Promise<Portfolio> {
     return await this.queryBus.execute(new ReadPortfolioByIdQuery(id, userId));
+  }
+
+  async readPortfolio(userId: string): Promise<Portfolio[]> {
+    return await this.queryBus.execute(new ReadPortfolioQuery(userId));
   }
 
   async updatePortfolio(id: string, portfolio: PortfolioDto, userId: string): Promise<Portfolio> {

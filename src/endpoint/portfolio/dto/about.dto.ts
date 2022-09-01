@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsPositive, IsString } from 'class-validator';
 
 export class AboutDto {
   @ApiProperty()
@@ -13,4 +13,8 @@ export class AboutDto {
   @ApiProperty()
   @IsString()
   content: string;
+
+  @ApiProperty()
+  @IsPositive()
+  order: number;
 }

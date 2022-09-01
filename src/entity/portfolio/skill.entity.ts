@@ -16,4 +16,7 @@ export class Skill {
 
   @Column()
   rating: number;
+
+  @Column()
+  order: number;
 }
