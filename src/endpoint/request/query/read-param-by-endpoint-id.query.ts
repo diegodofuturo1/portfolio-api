@@ -1,4 +1,3 @@
-
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException } from '@nestjs/common';
@@ -23,9 +22,8 @@ export class ReadParamByEndpointIdQueryHandler
 
     if (!endpointId) throw new BadRequestException('Id não informado');
 
-    const param = await this.repository.find({ endpointId, userId });
+    const param = await this.repository.find({ where: { endpointId, userId } });
 
     return param;
   }
 }
-

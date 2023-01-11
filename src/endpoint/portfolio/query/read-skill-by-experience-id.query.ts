@@ -23,7 +23,7 @@ export class ReadSkillByExperienceIdQueryHandler
 
     if (!experienceId) throw new BadRequestException('Id não informado');
 
-    const skill = await this.repository.find({ experienceId, userId });
+    const skill = await this.repository.find({ where: { experienceId, userId } });
 
     return skill.sort(alphanumericSorter);
   }

@@ -1,4 +1,3 @@
-
 import { Repository } from 'typeorm';
 import { About } from 'src/entity/portfolio/about.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,9 +9,7 @@ export class ReadAboutByIdQuery implements IQuery {
 }
 
 @QueryHandler(ReadAboutByIdQuery)
-export class ReadAboutByIdQueryHandler
-  implements IQueryHandler<ReadAboutByIdQuery>
-{
+export class ReadAboutByIdQueryHandler implements IQueryHandler<ReadAboutByIdQuery> {
   constructor(
     @InjectRepository(About)
     private readonly repository: Repository<About>,
@@ -23,11 +20,10 @@ export class ReadAboutByIdQueryHandler
 
     if (!id) throw new BadRequestException('Id não informado');
 
-    const about = await this.repository.findOne({ id, userId });
+    const about = await this.repository.findOne({ where: { id, userId } });
 
     if (!about) throw new NotFoundException('Biografia não encontrada');
 
     return about;
   }
 }
-

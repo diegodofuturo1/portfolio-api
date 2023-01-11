@@ -1,4 +1,3 @@
-
 import { Repository } from 'typeorm';
 import { Param } from 'src/entity/request/param.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,9 +9,7 @@ export class ReadParamByIdQuery implements IQuery {
 }
 
 @QueryHandler(ReadParamByIdQuery)
-export class ReadParamByIdQueryHandler
-  implements IQueryHandler<ReadParamByIdQuery>
-{
+export class ReadParamByIdQueryHandler implements IQueryHandler<ReadParamByIdQuery> {
   constructor(
     @InjectRepository(Param)
     private readonly repository: Repository<Param>,
@@ -23,11 +20,10 @@ export class ReadParamByIdQueryHandler
 
     if (!id) throw new BadRequestException('Id não informado');
 
-    const param = await this.repository.findOne({ id, userId });
+    const param = await this.repository.findOne({ where: { id, userId } });
 
     if (!param) throw new NotFoundException('Biografia não encontrada');
 
     return param;
   }
 }
-

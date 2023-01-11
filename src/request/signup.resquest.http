@@ -3,8 +3,9 @@ POST http://localhost:5000/auth/signup
 content-type: application/json
 
 {
+  "name": "Diego",
   "email": "diegodofuturo1@gmail.com",
-  "password": "xxx"
+  "password": "xxxx"
 }
 
 ###Create Email

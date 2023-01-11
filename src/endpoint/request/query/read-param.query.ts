@@ -18,7 +18,7 @@ export class ReadParamQueryHandler implements IQueryHandler<ReadParamQuery> {
   async execute(query: ReadParamQuery): Promise<any> {
     const { userId } = query;
 
-    const param = await this.repository.find({ userId });
+    const param = await this.repository.find({ where: { userId } });
 
     if (!param) throw new NotFoundException('Parâmetro não encontrado');
 

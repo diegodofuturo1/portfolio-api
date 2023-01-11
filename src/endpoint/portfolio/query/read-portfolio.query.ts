@@ -18,7 +18,7 @@ export class ReadPortfolioQueryHandler implements IQueryHandler<ReadPortfolioQue
   async execute(query: ReadPortfolioQuery): Promise<Portfolio[]> {
     const { userId } = query;
 
-    const portfolios = await this.repository.find({ userId });
+    const portfolios = await this.repository.find({ where: { userId } });
 
     if (!portfolios) throw new NotFoundException('Portfólio não encontrado');
 

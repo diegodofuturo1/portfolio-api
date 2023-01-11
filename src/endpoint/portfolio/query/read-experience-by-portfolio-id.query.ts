@@ -23,7 +23,7 @@ export class ReadExperienceByPortfolioIdQueryHandler
 
     if (!portfolioId) throw new BadRequestException('Id não informado');
 
-    const experience = await this.repository.find({ portfolioId, userId });
+    const experience = await this.repository.find({ where: { portfolioId, userId } });
 
     return experience.sort(alphanumericSorter);
   }

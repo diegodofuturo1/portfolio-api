@@ -9,9 +9,7 @@ export class ReadEndpointQuery implements IQuery {
 }
 
 @QueryHandler(ReadEndpointQuery)
-export class ReadEndpointQueryHandler
-  implements IQueryHandler<ReadEndpointQuery>
-{
+export class ReadEndpointQueryHandler implements IQueryHandler<ReadEndpointQuery> {
   constructor(
     @InjectRepository(Endpoint)
     private readonly repository: Repository<Endpoint>,
@@ -20,7 +18,7 @@ export class ReadEndpointQueryHandler
   async execute(query: ReadEndpointQuery): Promise<any> {
     const { userId } = query;
 
-    const endpoint = await this.repository.find({ userId });
+    const endpoint = await this.repository.find({ where: { userId } });
 
     if (!endpoint) throw new NotFoundException('Endpoint não encontrado');
 

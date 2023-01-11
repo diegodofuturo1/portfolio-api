@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
@@ -9,9 +9,7 @@ export class ReadUserByIdQuery implements IQuery {
 }
 
 @QueryHandler(ReadUserByIdQuery)
-export class ReadUserByIdQueryHandler
-  implements IQueryHandler<ReadUserByIdQuery>
-{
+export class ReadUserByIdQueryHandler implements IQueryHandler<ReadUserByIdQuery> {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
@@ -22,7 +20,10 @@ export class ReadUserByIdQueryHandler
 
     if (!id) throw new BadRequestException('Id não informado');
 
-    const user = await this.repository.findOne({ id });
+    const options: FindOneOptions<User> = {
+      where: { id },
+    };
+    const user = await this.repository.findOne(options);
 
     if (!user) throw new NotFoundException('Usuário não encontrado');
 

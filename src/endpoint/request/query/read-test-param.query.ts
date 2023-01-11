@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -18,7 +18,11 @@ export class ReadTestParamQueryHandler implements IQueryHandler<ReadTestParamQue
   async execute(query: ReadTestParamQuery): Promise<TestParam[]> {
     const { userId, testId } = query;
 
-    const test = await this.repository.find({ userId, testId });
+    const options: FindOneOptions<TestParam> = {
+      where: { userId, testId },
+    };
+
+    const test = await this.repository.find(options);
 
     if (!test) throw new NotFoundException('Parâmetro não encontrado');
 

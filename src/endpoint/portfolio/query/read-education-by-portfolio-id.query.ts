@@ -23,7 +23,7 @@ export class ReadEducationByPortfolioIdQueryHandler
 
     if (!portfolioId) throw new BadRequestException('Id não informado');
 
-    const education = await this.repository.find({ portfolioId, userId });
+    const education = await this.repository.find({ where: { portfolioId, userId } });
 
     return education.sort(alphanumericSorter);
   }
